@@ -5,23 +5,36 @@ require 'find'
 
 watcher = Inotify.new
 descriptor_to_name=[]
-basefiles=[]
+basefiles=[] #get from database
+files_to_sync=[]
+files_to_remove=[]
+
+def i_delete (event)
+    puts event.name
+end
+
+def i_create (event)
+    puts event.name
+end
+
 actions= {
 	Inotify::CREATE => :i_create,
 	Inotify::DELETE => :i_delete,
 	Inotify::MOVED_FROM => :i_delete,
 	Inotify::MOVED_TO => :i_create,
-	Inotify::MODIFY => :i_modify
+	Inotify::MODIFY => :i_create
 }
 
 Find.find("/home/lep/test-i") do |f|
-	wd=watcher.add_watch(f, Inotify::CREATE | INOTIFY_DELETE | INOTIFY_MODIFY | INOTIFY_MOVED)
-	descriptor_to_name[wd]=f
+	#if File.directory?(f)
+		wd=watcher.add_watch(f, Inotify::CREATE | Inotify::DELETE | Inotify::MODIFY | Inotify::MOVE)
+		descriptor_to_name[wd]=f
+	#end
 	basefiles << f
+	puts f
 end
 
-#brauch ich nen thread?
-t=Thread.new do
+inotify_t=Thread.new do
 	watcher.each_event do |event|
 		action=actions[event.mask]
 		if action
@@ -30,4 +43,5 @@ t=Thread.new do
 	end
 end
 
-t.join
+inotify_t.join
+
