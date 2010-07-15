@@ -13,7 +13,8 @@ class BackUp
 		@interval	= interval
 
 		@wd2name	= {}
-		@queue		= FQueue.new '/home/lep/.backup_queue' #TODO
+		#TODO: queue unique for each instance (filename)
+		@queue		= FQueue.new '/home/lep/.backup_queue'
 		@cookie_hash= {}
 
 		@dir_watcher= Inotify.new
