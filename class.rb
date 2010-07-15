@@ -2,6 +2,7 @@
 
 require 'inotify'
 require 'find'
+require 'fqueue'
 
 class BackUp
 	@@mask = Inotify::CREATE | Inotify::DELETE | Inotify::MOVE | Inotify::MODIFY
@@ -12,7 +13,7 @@ class BackUp
 		@interval	= interval
 
 		@wd2name	= {}
-		@queue		= [] #TODO: class for writing this to disk
+		@queue		= FQueue.new '/home/lep/.backup_queue' #TODO
 		@cookie_hash= {}
 
 		@dir_watcher= Inotify.new
@@ -31,10 +32,6 @@ class BackUp
 			sleep @interval
 			self.process_queue
 			self.link_files
-			#TODO: lock queue or something
-			@queue.each do |e|
-				#TODO: dispatch each action. can be overwritten for gui
-			end
 		end
 	end
 

@@ -2,12 +2,10 @@
 
 class FQueue
 
-	def initialize file_name, load_file=false
+	def initialize file_name
 		@queue = []
-		if load_file
-			File.open(file_name).each do |line|
-				@queue << Marshal.load(line)
-			end
+		File.open(file_name).each do |line|
+			@queue << Marshal.load(line)
 		end
 		@file = File.new file_name, "a"
 	end
