@@ -1,1 +1,2 @@
 Backup-software for Linux in Ruby using Inotify.
+I also added cookie-support in ruby-inotify-0.0.2.

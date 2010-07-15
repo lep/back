@@ -1,0 +1,35 @@
+have_header: checking for linux/inotify.h... -------------------- yes
+
+"cc -E -I. -I/usr/lib/ruby/1.8/x86_64-linux -I.    -fno-strict-aliasing -g -g -O2  -fPIC    conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include <linux/inotify.h>
+/* end */
+
+--------------------
+
+have_header: checking for version.h... -------------------- yes
+
+"cc -E -I. -I/usr/lib/ruby/1.8/x86_64-linux -I.    -fno-strict-aliasing -g -g -O2  -fPIC    conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include <version.h>
+/* end */
+
+--------------------
+
+have_type: checking for OpenFile in ruby.h,rubyio.h... -------------------- yes
+
+"cc -I. -I/usr/lib/ruby/1.8/x86_64-linux -I.    -fno-strict-aliasing -g -g -O2  -fPIC     -c conftest.c"
+checked program was:
+/* begin */
+1: #include <ruby.h>
+2: #include <rubyio.h>
+3: 
+4: /*top*/
+5: typedef OpenFile conftest_type;
+6: int conftestval[sizeof(conftest_type)?1:-1];
+/* end */
+
+--------------------
+
