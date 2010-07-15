@@ -24,14 +24,30 @@ class BackUp
 		@dir_thread.join
 	end
 
+	protected
+
 	def backup
-		#TODO: lock queue or something
-		@queue.each do |e|
-			#TODO: dispatch each action. can be overwritten for gui
+		while true
+			sleep @interval
+			self.process_queue
+			self.link_files
+			#TODO: lock queue or something
+			@queue.each do |e|
+				#TODO: dispatch each action. can be overwritten for gui
+			end
 		end
 	end
 
-	private
+	def process_queue
+		#TODO: lock queue or something
+		@queue.each do |e|
+			#TODO: dispatch each action
+		end
+	end
+
+	def link_files 
+	end
+
 	def add_base_watches
 		Find.find @base_dir do |p|
 			if not File.directory? p
