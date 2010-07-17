@@ -5,8 +5,10 @@ class FQueue
 	def initialize file_name
 		@queue = []
 		@file_name = file_name
-		File.open(file_name).each do |line|
-			@queue << Marshal.load(line)
+		if File.exists? file_name
+			File.open(file_name).each do |line|
+				@queue << Marshal.load(line)
+			end
 		end
 		@file = File.new file_name, "a"
 	end
