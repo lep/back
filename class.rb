@@ -43,12 +43,8 @@ class BackUp
 	def backup
 		while true
 			sleep @interval
-			puts "Doing backup, yeah"
 			self.link_n_stuff
-			puts "Finished link_n_stuff"
 			self.process_queue
-			puts "Finished process_queue"
-			puts "Backup finished"
 		end
 	end
 
@@ -73,19 +69,9 @@ class BackUp
 	end
 
 	def process_queue
-		puts @queue
-		puts "oooooooooooooooooooooooooooooooo"
 		@queue.each do |e|
 			new_path = File.join @new, e[:path]
 	        old_path = File.join @base_dir, e[:path]
-
-			puts old_path
-			puts new_path
-
-<<IDEE
-Zuerst alle create und modify befehle abarbeiten,
-danach alle move und remove befehle.
-IDEE
 
 			if e[:action] == :create_dir
 				system "mkdir '#{new_path}'"
@@ -115,7 +101,6 @@ IDEE
 			end
 
 		end
-		puts "---------------------------"
 		@queue.clear
 	end
 
