@@ -72,7 +72,7 @@ class BackUp
 		@queue.each do |e|
 			new_path = File.join @new, e[:path]
 	        old_path = File.join @base_dir, e[:path]
-
+			puts e
 			if e[:action] == :create_dir
 				system "mkdir '#{new_path}'"
 				#Dir.mkdir new_path
@@ -96,10 +96,12 @@ class BackUp
 				system "mv '#{d}' '#{new_path}'"
 				#File.rename File.join(@latest, e[:from]), new_path
 			elsif e[:action]== :move_file
+				d = File.join(@new, e[:from])
 				system "cp '#{old_path}' '#{new_path}'"
+				system "rm -f '#{d}'"
 				#File.rename File.join(@latest, e[:from]), new_path
 			end
-
+			puts "----------------------------------"
 		end
 		@queue.clear
 	end
