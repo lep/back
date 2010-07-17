@@ -98,8 +98,8 @@ IDEE
 				system("rm -rf '#{new_path}'")
 				#Dir.unlink new_path
 			elsif e[:action]==:delete_file
-				system("rm '#{new_file}'")
-				#File.unlink new_path
+				#system("rm '#{new_file}'")
+				File.unlink new_path if File.exists? new_path
 			elsif e[:action]==:modify_file
 				#File.unlink(new_path) if File.exists? new_path
 				system("cp '#{old_path}' '#{new_path}'")
@@ -143,6 +143,15 @@ IDEE
 					wd=@dir_watcher.add_watch(path, @@mask)
 					@wd2name[wd]=path
 					@queue << { :action => :create_dir, :path => file }
+					Find.find path do |f|
+						if File.directory? f
+							name=f.clone
+							name[0, @base_dir.length]=""
+							wd=@dir_watcher.add_watch(f, @@mask)
+							@wd2name[wd]=f
+							@queue << { :action => :create_dir, :path => name }
+						end
+					end
 				else
 					@queue << { :action => :create_file, :path => file }
 				end
