@@ -74,50 +74,24 @@ class BackUp
 		@queue.each do |e|
 			new_path = File.join @new, e[:path]
 	        old_path = File.join @base_dir, e[:path]
-			if e[:action] == :create_dir
-				#FileUtils.mkdir(new_path, :verbose => true)
-				#system "mkdir '#{new_path}'"
+			case e[:action]
+			when :create_dir then
 				`mkdir '#{new_path}'` unless File.exists? new_path
-				#Dir.mkdir( new_path) unless File.exists? new_path
-			elsif e[:action] == :create_file
-				#FileUtils.cp(old_path, new_path)
-				#File.unlink( new_path) if File.exists? new_path
-				#File.copy( old_path, new_path) if File.exists? old_path
-				#system "cp '#{old_path}' '#{new_path}'"
+			when :create_file then
 				`cp '#{old_path}' '#{new_path}'`
-			elsif e[:action]==:delete_dir
-				#FileUtils.remove_entry_secure(new_path)
-				#system("rm -rf '#{new_path}'")
-				#Dir.unlink( new_path) if File.exists? new_path
+			when :delete_dir then
 				`rm -rf '#{new_path}'` if File.exists? new_path
-			elsif e[:action] == :delete_file
-				#FileUtils.rm(new_file)
-				#system("rm '#{new_file}'")
+			when :delete_file then
 				File.unlink new_path if File.exists? new_path
-			elsif e[:action]==:modify_file
-				#FileUtils.cp(old_path, new_path)
-				#File.unlink(new_path) if File.exists? new_path
-				#system("cp '#{old_path}' '#{new_path}'")
-				#File.copy(old_path, new_path) if File.exists? old_path
+			when :modify_file then
 				`cp '#{old_path}' '#{new_path}'` if File.exists? old_path
-			elsif e[:action]== :move_dir
+			when :move_dir then
 				d = File.join(@new, e[:from])
-				#FileUtils.mv(d, new_path)
-				#system "mv '#{d}' '#{new_path}'"
-				#Dir.unlink( new_path) if File.exists? new_path
-				#File.copy(d, new_path) if File.exists? d
 				`mv '#{d}' '#{new_path}'` if File.exists? d
-			elsif e[:action]== :move_file
+			when :move_file then
 				d = File.join(@new, e[:from])
-				#FileUtils.cp(old_path, new_path)
-				#FileUtils.rm(d)
-				#system "cp '#{old_path}' '#{new_path}'"
-				#system "rm -f '#{d}'"
 				`cp '#{old_path}' '#{new_path}'` if File.exists? old_path
 				`rm -f '#{d}'` if File.exists? d
-				#File.unlink( new_path) if File.exists? new_path
-				#File.copy(old_path, new_path) if File.exists? old_path
-				#File.unlink(d) if File.exists? d
 			end
 		end
 		@queue.clear
