@@ -1,11 +1,9 @@
 #!/usr/bin/ruby
 
-$stdout = File.new('/dev/null', 'w')
-
 require 'inotify'
 require 'find'
 require 'fqueue'
-#require 'ftools'
+require 'fileutils'
 
 class BackUp
 	@@mask = Inotify::CREATE | Inotify::DELETE | Inotify::MOVE | Inotify::MODIFY
@@ -34,12 +32,20 @@ class BackUp
 
 	def initial_backup
 		return if File.exists? File.join(@backup_dir, 'latest')
-		
-		Find.find @base_dir do |f|
-			if File.directory? f
-			end
+		@new = File.join(@backup_dir, Time.now.strftime("%Y.%m.%d-%H:%M:%S"))
 
+		Find.find @base_dir do |f|
+			name = f.clone
+			name[0, @base_dir.length]=""
+			
+			if File.directory? f
+				Dir.mkdir File.join(@new, name)
+			else
+				FileUtils.copy f, File.join(@new, name)
+			end
 		end
+
+		File.symlink @new, File.join(@backup_dir, 'latest')
 	end
 
 	def backup
